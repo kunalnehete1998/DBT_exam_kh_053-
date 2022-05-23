@@ -1,0 +1,126 @@
+
+-- ***************************************** SECTION 1 **********************************************
+-- 1
+
+			create table dept(
+				DEPTNO INT(2),
+				DNAME varchar(15),
+				LOC VARCHAR(10)
+			);
+
+			INSERT INTO DEPT(DEPTNO, DNAME, LOC) VALUES
+								(10, 'ACCOUNTING', 'NEW YORK'),
+								(20, 'RESERACH'  , 'DALLAS'  ),
+								(30, 'SALES'     , 'CHICAGO' ),
+								(40, 'OPERATIONS', 'BOSTON'  );
+   
+   
+-- 2
+
+			create table EMP(
+				EMPNO INT(4),
+				ENAME varchar(10),
+				JOB VARCHAR(9),
+				HIREDATE DATE, 
+				SAL FLOAT(7,2),
+				COMM FLOAT(7,2),
+				DEPTNO INT(2)
+			);
+
+			INSERT INTO EMP(EMPNO, ENAME, JOB, HIREDATE, SAL, COMM, DEPTNO) VALUES
+						(7839, 'KING'  , 'MANAGER' , '1991-11-17', 5000, NULL, 10),
+						(7698, 'BLAKE' , 'CLERK'   , '1981-05-01', 2850, NULL, 30),
+						(7782, 'CLARK' , 'MANAGER' , '1981-06-09', 2450, NULL, 10),
+						(7566, 'JONES' , 'CLERK'   , '1981-04-02', 2975, NULL, 20),
+						(7654, 'MARTIN', 'SALESMAN', '1981-09-28', 1250, 1400, 30),
+						(7499, 'ALLEN' , 'SALESMAN', '1981-02-20', 1600, 300 , 30);
+   
+   
+-- 3 
+			SELECT * FROM EMP WHERE SAL BETWEEN 2500 AND 5000;
+
+-- 4
+			SELECT ENAME FROM EMP ORDER BY ENAME DESC;
+
+-- 5
+			SELECT LOWER(JOB) FROM EMP;
+
+-- 6
+			SELECT ENAME , LENGTH(ENAME) FROM EMP;
+
+-- 7
+			SELECT DEPTNO , COUNT(DEPTNO) FROM EMP GROUP BY DEPTNO;
+
+-- 8
+			SELECT DNAME , ENAME FROM EMP, DEPT WHERE DEPT.DEPTNO = EMP.DEPTNO;
+
+-- 9
+			SELECT ENAME, INSTR(ENAME, 'AR') AS P0S FROM EMP;
+
+-- 10
+			SELECT ENAME, 0.2*SAL AS 'HRA' FROM EMP;
+
+
+
+
+-- ***************************************** SECTION 2 **********************************************
+
+-- -----------------------------------------------------------------------
+CREATE TABLE TEMPP(VAL VARCHAR(25));
+-- -----------------------------------------------------------------------
+
+
+-- 1
+
+				DELIMITER //
+				CREATE PROCEDURE PROC1(X VARCHAR(20), Y VARCHAR(20) )
+				BEGIN
+					IF INSTR(Y,X) THEN
+						INSERT INTO TEMPP VALUES ('VALUE INSERTED');
+					END IF;
+				END ; //
+				DELIMITER ;
+
+-- ----------------------------
+	-- CALLING PROCEDURE 
+	CALL PROC1('DAC', 'CDAC');
+	SELECT * FROM TEMPP;
+-- -----------------------------    
+    
+    
+-- ------------------------------------------
+CREATE TABLE TEMPP1(X BOOLEAN);
+-- ------------------------------------------
+-- 2
+
+				DELIMITER //
+				CREATE FUNCTION FUNC1(X INT, Y INT, Z INT)
+				RETURNS BOOLEAN
+                		DETERMINISTIC
+				BEGIN
+					IF X+Y > Z THEN 
+						IF Y+Z >x THEN
+							IF X+Z > Y THEN
+								RETURN TRUE;
+							END IF ;
+						END IF;
+					ELSE 
+						RETURN FALSE;
+					END IF ;
+				END ; //
+				DELIMITER ;
+                
+                
+               			 DELIMITER //
+				CREATE PROCEDURE PROC2()
+				BEGIN
+					DECLARE X BOOLEAN ;
+                   			 SET X = FUNC1(3,4,5);
+                    			INSERT INTO TEMPP1 VALUES( X );
+				END ; //
+				DELIMITER ;
+
+-- -------------------                
+CALL PROC2();
+SELECT * FROM TEMPP1;
+-- -------------------
